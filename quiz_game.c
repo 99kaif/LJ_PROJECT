@@ -1,10 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+typedef enum option {A=1,B,C,D} option;
 struct mcq
 {
     int question_number;
     char* question;
+    char answers[4];
+    option correct_option;
 };
 typedef struct mcq mcq;
 
@@ -40,11 +43,10 @@ int is_in_arr(int* arr,int element,int size){
     return 0;
 }
 void main(){
-    mcq* mcq_set;
-    mcq_set=malloc(10*sizeof(mcq));
+    mcq mcq_set[10];
     for (int i = 0; i < 10; i++)
     {
-        mcq_set[i].question_number=i;
+        mcq_set[i].question_number=i+1;
     }
     mcq_set->question="aman";
     int arr[]={0,1,2,3,4,5,6,7,8,9};

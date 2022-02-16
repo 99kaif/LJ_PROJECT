@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include<windows.h>
 char words[1][6]={"hello"};
 void start_game()
 {

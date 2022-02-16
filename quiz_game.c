@@ -49,16 +49,17 @@ void main(){
         mcq_set[i].question_number=i+1;
     }
     mcq_set->question="aman";
-    int arr[]={0,1,2,3,4,5,6,7,8,9};
+    mcq_set->correct_option=A;
+    int remaining_question[]={0,1,2,3,4,5,6,7,8,9};
     int size=sizeof(arr)/sizeof(int);
     int i=1;
     while (size!=0)
     {
         int x=rand()%10;
-        if (is_in_arr(arr,x,size))
+        if (is_in_arr(remaining_question,x,size))
         {
             printf("questin %d",mcq_set[x].question_number);
-            del(arr,x,&size);
+            del(remaining_question,x,&size);
         }
         
     }

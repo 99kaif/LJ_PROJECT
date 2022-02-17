@@ -113,6 +113,7 @@ void loop(){
         exit(0);
     default:
         printf("please enter valid choice sir!!!!\n");
+        getch();
         break;
     }
     }

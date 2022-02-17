@@ -71,6 +71,13 @@ void start_test(){
 }
 void leaderboard(){
     system("cls");
+    if(game_count==0) 
+    {
+        printf("there is no player data!\n");
+        printf("press any key to continue.....");
+        getch();
+        return;
+    }
     system("color 1");
     printf("\t\t\tLEADERBOARD\n");
     for (int i = 0; i < game_count; i++)

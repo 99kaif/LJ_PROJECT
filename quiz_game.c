@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<time.h>
+char start_stop='Y';
 typedef enum option {A=65,B,C,D} option;
 struct mcq
 {
@@ -9,6 +10,7 @@ struct mcq
     char question[200];
     char answers[4][200];
     option correct_option;
+    option chosen_option;
 };
 typedef struct mcq mcq;
 
@@ -43,8 +45,17 @@ int is_in_arr(int* arr,int element,int size){
     }
     return 0;
 }
-void main(){
+void review(mcq mcq_set[10])
+{
+    for (int i = 0; i < 10; i++)
+    {
+        
+    }
+}
+void main(char start_stop){
+    system("cls");
     srand(time(0));
+    int correct_question_number[10]={0};
     mcq mcq_set[10];
     for (int i = 0; i < 10; i++)
     {
@@ -115,17 +126,32 @@ void main(){
     int i=1,score=0;
     while (size!=0)
     {
+        system("cls");
         int x=rand()%10;
         printf("question %d:%s",i,mcq_set[x].question);
         printf("\noptions:\n");
-        printf("A:%s\tB:%s\tC:%s\tD:%s\n",mcq_set[x].answers[0],mcq_set[x].answers[1],mcq_set[x].answers[2],mcq_set[x].answers[3]);
+        printf("\nA:%s\t\tB:%s\t\tC:%s\t\tD:%s\t\n",mcq_set[x].answers[0],mcq_set[x].answers[1],mcq_set[x].answers[2],mcq_set[x].answers[3]);
         char o;
         fflush(stdin);
+        printf("enter your answer:");
         scanf("%c",&o);
-        if((int)o==mcq_set[x].correct_option) score++;
+        while(o<'A' || o>'D')
+        {
+            printf("\nenter valid choice:");
+            fflush(stdin);
+            scanf("%c",&o);
+        }
+        mcq_set[x].chosen_option=(int)o;
+        if((int)o==mcq_set[x].correct_option)
+        {
+            score++;
+        }
         del(remaining_question,x,&size);
         i++;
     }
-    printf("\n\n\n\t\t\tYOUR SCORE\n\n\n");
-    printf("\t\t\t%d",score);
+    char want_review;
+    printf("\n\n\n\t\t\tYOUR SCORE IS %d\n\n\n",score);
+    printf("DO YOU WANT TO REVIEW YOUR TEST:");
+    scanf("%c",&want_review);
+    if(want_review=='Y') review(mcq_set);
 }

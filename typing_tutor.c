@@ -19,11 +19,19 @@ void update_leaderboard(char* name,double time_taken,int penalty,user_data* data
     data->time_taken=time_taken;
     data->user_penalty=penalty;
 }
+int name_exist(char* str)
+{
+    for (int i = 0; i < game_count; i++)
+    {
+        if(strcmp(str,(data+i)->username)==0) return 1;
+    }
+    return 0;
+}
 int penalty(char* a,char* input){
     int i=0,p=0;
     while (a[i]!='\0')
     {
-        if (a[i]!=input[i] || i>strlen(a))
+        if (a[i]!=input[i] || i>=strlen(a))
         {
             p++;
         }
@@ -81,13 +89,13 @@ void sort_leaderboard(user_data* data,int size)
         {
             if ((data+i)->time_taken>(data+i+1)->time_taken)
             {
-                int temp=(data+i)->time_taken;
-                (data+i)->time_taken=(data+i+1)->time_taken;
-                (data+i+1)->time_taken=temp;
+                user_data temp=*(data+i);
+                *(data+i)=*(data+i+1);
+                *(data+i+1)=temp;
             }
             i++;
         } 
-    } 
+    }
 }
 void start_test(){
     char name[50];
@@ -95,11 +103,33 @@ void start_test(){
     system("color 3");
     printf("enter your name:");
     scanf("%s",name);
+    while (name_exist(name))
+    {
+        printf("username already taken!!\n");
+        printf("enter your name:");
+        fflush(stdin);
+        scanf("%s",name);
+    }
+    
+    system("cls");
+    printf("\t\t\t\t\t\t\t\tRULES:\n");
+    printf("\t\t\t1]enter exact same sentance as given \n");
+    printf("\t\t\t2]if you enter text which is exactly the same as expected but not in order\n");
+    printf("\t\t\t  then it will be consider as mistakes\n");
+    printf("\t\t\t  for example:\n");
+    printf("\t\t\t  expected sentaance:hello world\n");
+    printf("\t\t\t  given input: hello world\n");
+    printf("\t\t\t  this will be consider as penalty!!\n");
+    printf("\t\t\t  you haven't only give attention on correct spelling but also the\n");
+    printf("\t\t\t  whitepace ,semicolon and the input should be in exact same order!!\n\n\n");
+    printf("\t\t\t  press any key if you have read the rules caarefully...");
+    getch();
+    system("cls");
     char input[strlen(sentance)+1];
-    printf("enter exact same sentance as given \n");
-    //count_down();
-    printf("SENTANCE:"),puts(sentance);
-    scanf("%c");
+    count_down();
+    system("cls");
+    printf("SENTANCE:\n"),puts(sentance);
+    fflush(stdin);
     clock_t t=clock();
     gets(input);
     t=clock()-t;
@@ -107,7 +137,7 @@ void start_test(){
     (data+game_count)->username=malloc(50);
     update_leaderboard(name,(double)(t/CLOCKS_PER_SEC),penalty(sentance,input),data+game_count);
     game_count++;
-    //sort_leaderboard(data,game_count);
+    sort_leaderboard(data,game_count);
     data=realloc(data,(game_count+1)*sizeof(user_data));
     getch();
 }
@@ -122,9 +152,10 @@ void leaderboard(){
     }
     system("color 1");
     printf("\t\t\tLEADERBOARD\n");
+    printf("-------------------------------------------------------------------------------\n");
     for (int i = 0; i < game_count; i++)
     {
-        printf("rank:%-5d\tname:%-20s\tpenalty:%-5d\ttime:%-5lf\n",i+1,(data+i)->username,(data+i)->user_penalty,(data+i)->time_taken);
+        printf("rank:%-5d\tname:%-15s\tpenalty:%-5d\ttime:%-5lf\n",i+1,(data+i)->username,(data+i)->user_penalty,(data+i)->time_taken);
     }
     
     getch();
@@ -132,23 +163,19 @@ void leaderboard(){
 int main_menu(){
     system("cls");
     system("color 2");
-    int choice;
+    char choice;
     printf("\t\t\t1.start test\n");
     printf("\t\t\t2.leaderboard\n");
     printf("\t\t\t3.quit\n");
     printf("\t\tenter the corresponding number of your choice:");
-    scanf("%d",&choice);
-    return choice;
+    fflush(stdin);
+    scanf("%c",&choice);
+    return ((int)choice-48);
 }
-int random_int(int range){
-    srand(time(0));
-    return rand()%(range+1);
-}
-
 void loop(){
     while (1)
     {
-        system("cls");
+    system("cls");
     int choice=main_menu();
     switch (choice)
     {
@@ -162,6 +189,7 @@ void loop(){
         exit(0);
     default:
         printf("please enter valid choice sir!!!!\n");
+        printf("press any key to go to main menu....");
         getch();
         break;
     }

@@ -1,0 +1,53 @@
+int trigpin = 7;
+int echopin = 8;
+int red = 5;
+int yellow = 6;
+int green = 12;
+double tank_depth = 19;
+double thirty_percent = 0.3*tank_depth;
+double sixty_percent = 0.6*tank_depth;
+double ninty_percent = 0.9*tank_depth;
+long duration;
+double distance;
+void setup() {
+  pinMode(trigpin,OUTPUT);
+  pinMode(echopin,INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(trigpin,LOW);
+  delayMicroseconds(20);
+
+  digitalWrite(trigpin,HIGH);
+  delayMicroseconds(100);
+
+  duration = pulseIn(echopin,HIGH);
+  distance = duration*0.034/2;
+
+  if(distance >= ninty_percent)
+  {
+    digitalWrite(red,HIGH);
+    digitalWrite(green,LOW);
+    digitalWrite(yellow,LOW);
+    
+  }
+  else if(distance >= sixty_percent)
+  {
+    digitalWrite(yellow,HIGH);
+    digitalWrite(red,LOW);
+    digitalWrite(green,LOW);
+    
+  }
+  else if(distance >= thirty_percent)
+  {
+    digitalWrite(green,HIGH);
+    digitalWrite(yellow,LOW);
+    digitalWrite(red,LOW);
+  }
+  Serial.print("Distance:");
+  Serial.print(distance);
+  Serial.print("CM\n");
+
+  delay(1000);
+}
